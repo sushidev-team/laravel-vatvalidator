@@ -1,9 +1,8 @@
 # VAT VALIDATOR
 
-[![Build Status](https://travis-ci.org/AMBERSIVE/laravel-vatvalidator.svg?branch=master)](https://travis-ci.org/AMBERSIVE/laravel-vatvalidator) 
-
 Validating the vat id from another company is a requirement within the european union.
 This package validates the vat id + give you further information about the company behind the vat id.
+The [CHANGELOG](CHANGELOG.md) offers an overview ob the changes done by us.
 
 ## Installation
 
