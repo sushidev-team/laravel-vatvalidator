@@ -36,6 +36,16 @@ $result->getCountry(); // Returns the Country code
 $result->getNumber(); // Returns the TAX number.
 ```
 
+### Validation rule
+
+This package also offers you a validation rule you there would be no need to do all that stuff manually.
+
+```php
+$validator = Validator::make(['vatid' => 'ATU69434328'], [
+    'vatid' => 'vat_eu'
+]);
+```
+
 ## Behind the scene
 
 This package is using the CheckVat Service from the european union to check if a tax id is valid. It is a soap client, so make sure your server is ready for soap class.
@@ -46,7 +56,7 @@ Please feel free to give us feedback or any improvement suggestions.
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Manuel Pirker-Ihl via [manuel.pirker-ihl@ambersive.com](mailto:manuel.pirker-ihl@ambersive.com). All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within this package, please send an e-mail to Manuel Pirker-Ihl via [manuel.pirker-ihl@ambersive.com](mailto:manuel.pirker-ihl@ambersive.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
