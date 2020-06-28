@@ -6,6 +6,8 @@ use Tests\TestCase;
 
 use AMBERSIVE\VatValidator\Classes\VatValidator;
 
+use VatValidator as VV;
+
 class VatValidatorTest extends TestCase
 {
 
@@ -40,6 +42,16 @@ class VatValidatorTest extends TestCase
     public function testIfVatValidatorReturnsValidObject():void {
         $result = $this->validator->check("ATU69434329");
         $this->assertNotNull($result);
+        $this->assertEquals("AT", $result->getCountry());
+        $this->assertEquals(true, $result->isValid());
+        $this->assertEquals("PICAPIPE GmbH", $result->getName());
+    }
+
+    /**
+     * Test if the Facade is working
+     */
+    public function testIfFacadeIsWorking():void {
+        $result = VV::check("ATU69434329");
         $this->assertEquals("AT", $result->getCountry());
         $this->assertEquals(true, $result->isValid());
         $this->assertEquals("PICAPIPE GmbH", $result->getName());

@@ -3,6 +3,7 @@
 namespace AMBERSIVE\VatValidator;
 
 use App;
+use Illuminate\Foundation\AliasLoader;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -16,11 +17,9 @@ class VatValidatorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Facade
-        App::bind('test',function() {
-            dd('test');
-            return new \AMBERSIVE\VatValidator\Classes\VatValidator();
-        });
+        $this->app->bind('vat-validator', \AMBERSIVE\VatValidator\Classes\VatValidator::class);
+        $loader = AliasLoader::getInstance();
+        $loader->alias('VatValidator', \AMBERSIVE\VatValidator\Facades\VatValidatorFacade::class);
     }
 
     /**
@@ -34,7 +33,7 @@ class VatValidatorServiceProvider extends ServiceProvider
         // Configs
         $this->publishes([
             __DIR__.'/Configs/vat-validator.php'         => config_path('vat-validator.php'),
-        ],'keepachangelog');
+        ],'vat-validator');
 
         $this->mergeConfigFrom(
             __DIR__.'/Configs/vat-validator.php', 'vat-validator.php'
