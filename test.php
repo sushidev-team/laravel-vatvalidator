@@ -4,6 +4,7 @@ $vatid = 'ATU69434329'; // Hier die zu überprüfende UID-Nummer einsetzen
 $vatid = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vatid));
 $cc = substr($vatid, 0, 2);
 $vn = substr($vatid, 2);
+echo $vn;
 $client = new SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl");
 
 if($client){

@@ -1,5 +1,5 @@
 {
-    "name": "ambersive/validator",
+    "name": "ambersive/vatvalidator",
     "description": "Wrapper for using the api from https://ec.europa.eu/taxation_customs/vies/ to validate a vat id.",
     "license": "MIT",
     "authors": [
@@ -28,7 +28,10 @@
         "laravel": {
             "providers": [
                 "AMBERSIVE\\VatValidator\\VatValidatorServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Test": "AMBERSIVE\\VatValidator\\Facades\\VatValidatorFacade"
+            }
         }
     },
     "scripts": {
