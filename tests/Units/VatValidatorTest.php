@@ -1,8 +1,6 @@
 <?php
 
-namespace AMBERSIVE\VatValidator\Tests\Unit;
-
-use Tests\TestCase;
+use AMBERSIVE\Tests\TestCase;
 
 use AMBERSIVE\VatValidator\Classes\VatValidator;
 
