@@ -25,7 +25,7 @@ class VatValidatorTest extends TestCase
         ];
 
         $client = $this->getMockFromWsdl(
-            'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', 'checkVat'
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'
         );
 
         $client
@@ -66,7 +66,7 @@ class VatValidatorTest extends TestCase
         ];
 
         $client = $this->getMockFromWsdl(
-            'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', 'checkVat'
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'
         );
 
         $client
