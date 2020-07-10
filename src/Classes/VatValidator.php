@@ -13,8 +13,9 @@ class VatValidator {
 
     public SoapClient $client;
 
-    public function __construct() {
-        $this->client = new SoapClient(config('vat-validator.wsdl', "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"));
+    public function __construct(SoapClient $client = null) {
+        $client = null;
+        $this->client = $client === null ? new SoapClient(config('vat-validator.wsdl', "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")) : $client;
     }
     
     

@@ -5,7 +5,6 @@ use AMBERSIVE\Tests\TestCase;
 use AMBERSIVE\VatValidator\Classes\VatValidator;
 
 use VatValidator as VV;
-use Validator;
 
 class VatValidatorTest extends TestCase
 {
@@ -15,7 +14,25 @@ class VatValidatorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->validator = new VatValidator();
+
+        $mockedResult = [
+            "countryCode"   =>  "AT",
+            "vatNumber"     =>  "U69434328",
+            "requestDate"   =>  "2020-07-10+02:00",
+            "valid"         => false,
+            "name"          => "---",
+            "address"       => "---"
+        ];
+
+        $client = $this->getMockFromWsdl(
+            'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', 'checkVat'
+        );
+
+        $client
+            ->method('checkVat')
+            ->willReturn((object) $mockedResult);
+
+        $this->validator = new VatValidator($client);
     }
 
     /**
@@ -39,11 +56,31 @@ class VatValidatorTest extends TestCase
      * Test if the validator returns the correct company profile
      */
     public function testIfVatValidatorReturnsValidObject():void {
-        $result = $this->validator->check("ATU69434329");
+
+        $mockedResult = [
+            "countryCode" => "AT",
+            "vatNumber"   => "U69434329",
+            "valid"   => true,
+            "name"    => "PICAPIPE GmbH",
+            "address" =>  "Geylinggasse 15-17\\nAT-1130 Wien"
+        ];
+
+        $client = $this->getMockFromWsdl(
+            'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl', 'checkVat'
+        );
+
+        $client
+            ->method('checkVat')
+            ->willReturn((object) $mockedResult);
+
+        $validator = new VatValidator($client);
+
+        $result = $validator->check("ATU69434329");
         $this->assertNotNull($result);
         $this->assertEquals("AT", $result->getCountry());
         $this->assertEquals(true, $result->isValid());
         $this->assertEquals("PICAPIPE GmbH", $result->getName());
+
     }
 
     /**
