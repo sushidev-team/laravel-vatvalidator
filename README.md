@@ -1,6 +1,6 @@
 # VAT VALIDATOR
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/f3b995d98829e0da0917/maintainability)](https://codeclimate.com/github/AMBERSIVE/laravel-vatvalidator/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f3b995d98829e0da0917/maintainability)](https://codeclimate.com/github/AMBERSIVE/laravel-vatvalidator/maintainability) [![Build Status](https://travis-ci.org/AMBERSIVE/laravel-vatvalidator.svg?branch=master)](https://travis-ci.org/AMBERSIVE/laravel-vatvalidator)
 
 Validating the vat id from another company is a requirement within the european union.
 This package validates the vat id + give you further information about the company behind the vat id.
