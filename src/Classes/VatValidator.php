@@ -2,6 +2,7 @@
 
 namespace AMBERSIVE\VatValidator\Classes;
 
+use App;
 use SoapClient;
 use SoapFault;
 
@@ -26,6 +27,8 @@ class VatValidator {
      * @return VatCompany
      */
     public function check(String $vatId): VatCompany {
+
+
 
         $vatId = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vatId));
 

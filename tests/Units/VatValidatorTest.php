@@ -25,7 +25,7 @@ class VatValidatorTest extends TestCase
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat'
+            __DIR__.'/../checkVatService.wsdl', 'checkVat' . md5( time().rand())
         );
 
         $client
@@ -66,7 +66,7 @@ class VatValidatorTest extends TestCase
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat'
+            __DIR__.'/../checkVatService.wsdl', 'checkVat' . md5( time().rand())
         );
 
         $client
