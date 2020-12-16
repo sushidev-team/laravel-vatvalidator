@@ -9,6 +9,35 @@ use Validator;
 
 class VatValidatorServiceProvider extends ServiceProvider
 {
+    public static $countries = [
+        'be',
+        'bg',
+        'cz',
+        'dk',
+        'de',
+        'ee',
+        'ie',
+        'el',
+        'es',
+        'fr',
+        'hr',
+        'it',
+        'cy',
+        'lv',
+        'lt',
+        'lu',
+        'hu',
+        'mt',
+        'nl',
+        'at',
+        'pt',
+        'ro',
+        'si',
+        'sk',
+        'fi',
+        'se',
+    ];
+
     /**
      * Register services.
      *
@@ -57,6 +86,34 @@ class VatValidatorServiceProvider extends ServiceProvider
                 $data = $validator->getData();
 
                 if (isset($data[$parameters[0]]) === false || $data[$parameters[0]] != $parameters[1]) {
+                    return true;
+                }
+
+                $instance = new \AMBERSIVE\VatValidator\Classes\VatValidator();
+                $result = $instance->check($value);
+
+                return $result->isValid();
+            } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
+                return false;
+            }
+        });
+
+        Validator::extend('vat_eu_address_and_if', function ($attribute, $value, $parameters, $validator) {
+            try {
+                $data = $validator->getData();
+
+                if (isset($data[$parameters[0]]) === false || isset($data[$parameters[1]]) === false) {
+                    // Required fields does not exists in the provided input
+                    return false;
+                }
+
+                if (in_array($data[$parameters[0]], static::$countries) === false) {
+                    // Cannot find the country in the list of european countries
+                    // This validator cannot check if the id is correct so mark it as true
+                    return true;
+                }
+
+                if ($data[$parameters[1]] != $parameters[2]) {
                     return true;
                 }
 

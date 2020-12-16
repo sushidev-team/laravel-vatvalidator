@@ -188,4 +188,25 @@ class VatValidatorTest extends TestCase
         // Test
         $this->assertFalse($validator->fails());
     }
+
+    public function testIfValidationExtentionsVatEuAddressAndIfFailsIfCountryIsNotFromEU():void
+    {
+
+        // Prepare
+        $data = [
+            'vatid' => 'XXX',
+            'company' => false,
+            'country' => 'at',
+        ];
+
+        $rules = [
+            'vatid' => 'vat_eu_address_and_if:country,company,true',
+        ];
+
+        // Execute
+        $validator = Validator::make($data, $rules);
+
+        // Test
+        $this->assertFalse($validator->fails());
+    }
 }
