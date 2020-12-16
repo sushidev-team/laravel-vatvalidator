@@ -1,14 +1,11 @@
 <?php
 
 use AMBERSIVE\Tests\TestCase;
-
 use AMBERSIVE\VatValidator\Classes\VatValidator;
-
 use VatValidator as VV;
 
 class VatValidatorTest extends TestCase
 {
-
     private VatValidator $validator;
 
     protected function setUp(): void
@@ -16,16 +13,16 @@ class VatValidatorTest extends TestCase
         parent::setUp();
 
         $mockedResult = [
-            "countryCode"   =>  "AT",
-            "vatNumber"     =>  "U69434328",
-            "requestDate"   =>  "2020-07-10+02:00",
-            "valid"         => false,
-            "name"          => "---",
-            "address"       => "---"
+            'countryCode'   =>  'AT',
+            'vatNumber'     =>  'U69434328',
+            'requestDate'   =>  '2020-07-10+02:00',
+            'valid'         => false,
+            'name'          => '---',
+            'address'       => '---',
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat' . md5( time().rand())
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'.md5(time().rand())
         );
 
         $client
@@ -36,37 +33,39 @@ class VatValidatorTest extends TestCase
     }
 
     /**
-     * Test if the the method will throw an exeception cause the id complete wrong
+     * Test if the the method will throw an exeception cause the id complete wrong.
      */
-    public function testIfVatValidatorThrowsExceptionIfInvalidVatId():void {
+    public function testIfVatValidatorThrowsExceptionIfInvalidVatId():void
+    {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
-        $result = $this->validator->check("TEST");
+        $result = $this->validator->check('TEST');
     }
 
     /**
-     * Test if the vat return invalid if the id seems to be in the right structure but is wrong
+     * Test if the vat return invalid if the id seems to be in the right structure but is wrong.
      */
-    public function testIfVatValidatorWillNotThrowExeceptionIfTheVatIdIsWrong():void {
-        $result = $this->validator->check("ATU69434328");
+    public function testIfVatValidatorWillNotThrowExeceptionIfTheVatIdIsWrong():void
+    {
+        $result = $this->validator->check('ATU69434328');
         $this->assertNotNull($result);
-        $this->assertEquals(false, $result->isValid());      
+        $this->assertEquals(false, $result->isValid());
     }
 
     /**
-     * Test if the validator returns the correct company profile
+     * Test if the validator returns the correct company profile.
      */
-    public function testIfVatValidatorReturnsValidObject():void {
-
+    public function testIfVatValidatorReturnsValidObject():void
+    {
         $mockedResult = [
-            "countryCode" => "AT",
-            "vatNumber"   => "U69434329",
-            "valid"   => true,
-            "name"    => "PICAPIPE GmbH",
-            "address" =>  "Geylinggasse 15-17\\nAT-1130 Wien"
+            'countryCode' => 'AT',
+            'vatNumber'   => 'U69434329',
+            'valid'   => true,
+            'name'    => 'PICAPIPE GmbH',
+            'address' =>  'Geylinggasse 15-17\\nAT-1130 Wien',
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat' . md5( time().rand())
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'.md5(time().rand())
         );
 
         $client
@@ -75,33 +74,34 @@ class VatValidatorTest extends TestCase
 
         $validator = new VatValidator($client);
 
-        $result = $validator->check("ATU69434329");
+        $result = $validator->check('ATU69434329');
         $this->assertNotNull($result);
-        $this->assertEquals("AT", $result->getCountry());
+        $this->assertEquals('AT', $result->getCountry());
         $this->assertEquals(true, $result->isValid());
-        $this->assertEquals("PICAPIPE GmbH", $result->getName());
-
+        $this->assertEquals('PICAPIPE GmbH', $result->getName());
     }
 
     /**
-     * Test if the Facade is working
+     * Test if the Facade is working.
      */
-    public function testIfFacadeIsWorking():void {
-        $result = VV::check("ATU69434329");
-        $this->assertEquals("AT", $result->getCountry());
+    public function testIfFacadeIsWorking():void
+    {
+        $result = VV::check('ATU69434329');
+        $this->assertEquals('AT', $result->getCountry());
         $this->assertEquals(true, $result->isValid());
-        $this->assertEquals("PICAPIPE GmbH", $result->getName());
+        $this->assertEquals('PICAPIPE GmbH', $result->getName());
     }
-    
-    public function testIfValidationExtentionsWorks():void {
 
-        // Prepare 
+    public function testIfValidationExtentionsWorks():void
+    {
+
+        // Prepare
         $data = [
-            'vatid' => 'ATU69434329'
+            'vatid' => 'ATU69434329',
         ];
 
         $rules = [
-            'vatid' => 'vat_eu'
+            'vatid' => 'vat_eu',
         ];
 
         // Execute
@@ -109,18 +109,18 @@ class VatValidatorTest extends TestCase
 
         // Test
         $this->assertFalse($validator->fails());
-
     }
 
-    public function testIfValidationExtentionsWorksButReturnsInvalid():void {
+    public function testIfValidationExtentionsWorksButReturnsInvalid():void
+    {
 
-        // Prepare 
+        // Prepare
         $data = [
-            'vatid' => 'ATU69434328'
+            'vatid' => 'ATU69434328',
         ];
 
         $rules = [
-            'vatid' => 'vat_eu'
+            'vatid' => 'vat_eu',
         ];
 
         // Execute
@@ -128,18 +128,18 @@ class VatValidatorTest extends TestCase
 
         // Test
         $this->assertTrue($validator->fails());
-
     }
 
-    public function testIfValidationExtentionsWorksButReturnsInvalidEvenIfPassedValueIsTotallyWrong():void {
+    public function testIfValidationExtentionsWorksButReturnsInvalidEvenIfPassedValueIsTotallyWrong():void
+    {
 
-        // Prepare 
+        // Prepare
         $data = [
-            'vatid' => 'XXX'
+            'vatid' => 'XXX',
         ];
 
         $rules = [
-            'vatid' => 'vat_eu'
+            'vatid' => 'vat_eu',
         ];
 
         // Execute
@@ -147,7 +147,45 @@ class VatValidatorTest extends TestCase
 
         // Test
         $this->assertTrue($validator->fails());
-
     }
 
+    public function testIfValidationExtensionWorksWithVatEuIf():void
+    {
+
+        // Prepare
+        $data = [
+            'vatid' => 'XXX',
+            'company' => true,
+        ];
+
+        $rules = [
+            'vatid' => 'vat_eu_if:company,true',
+        ];
+
+        // Execute
+        $validator = Validator::make($data, $rules);
+
+        // Test
+        $this->assertTrue($validator->fails());
+    }
+
+    public function testIfValidadtionExtensionsIsValidIfRequiredIfIsFalse():void
+    {
+
+        // Prepare
+        $data = [
+            'vatid' => 'XXX',
+            'company' => false,
+        ];
+
+        $rules = [
+            'vatid' => 'vat_eu_if:company,true',
+        ];
+
+        // Execute
+        $validator = Validator::make($data, $rules);
+
+        // Test
+        $this->assertFalse($validator->fails());
+    }
 }

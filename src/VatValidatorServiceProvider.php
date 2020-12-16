@@ -3,14 +3,12 @@
 namespace AMBERSIVE\VatValidator;
 
 use App;
-use Validator;
 use Illuminate\Foundation\AliasLoader;
-
 use Illuminate\Support\ServiceProvider;
+use Validator;
 
 class VatValidatorServiceProvider extends ServiceProvider
 {
-
     /**
      * Register services.
      *
@@ -32,11 +30,11 @@ class VatValidatorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-       
+
         // Configs
         $this->publishes([
             __DIR__.'/Configs/vat-validator.php'         => config_path('vat-validator.php'),
-        ],'vat-validator');
+        ], 'vat-validator');
 
         $this->mergeConfigFrom(
             __DIR__.'/Configs/vat-validator.php', 'vat-validator.php'
@@ -47,12 +45,28 @@ class VatValidatorServiceProvider extends ServiceProvider
             try {
                 $instance = new \AMBERSIVE\VatValidator\Classes\VatValidator();
                 $result = $instance->check($value);
+
                 return $result->isValid();
-            } catch(\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
+            } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
                 return false;
             }
         });
 
-    }
+        Validator::extend('vat_eu_if', function ($attribute, $value, $parameters, $validator) {
+            try {
+                $data = $validator->getData();
 
+                if (isset($data[$parameters[0]]) === false || $data[$parameters[0]] != $parameters[1]) {
+                    return true;
+                }
+
+                $instance = new \AMBERSIVE\VatValidator\Classes\VatValidator();
+                $result = $instance->check($value);
+
+                return $result->isValid();
+            } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
+                return false;
+            }
+        });
+    }
 }
