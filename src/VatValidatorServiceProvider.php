@@ -85,7 +85,11 @@ class VatValidatorServiceProvider extends ServiceProvider
             try {
                 $data = $validator->getData();
 
-                if (isset($data[$parameters[0]]) === false || $data[$parameters[0]] != $parameters[1]) {
+                if ($parameters[1] === 'true' || $parameters[1] === 'false') {
+                    $parameters[1] = $parameters[1] === 'true';
+                }
+
+                if (isset($data[$parameters[0]]) === false || $data[$parameters[0]] !== $parameters[1]) {
                     return true;
                 }
 
@@ -102,6 +106,10 @@ class VatValidatorServiceProvider extends ServiceProvider
             try {
                 $data = $validator->getData();
 
+                if ($parameters[2] === 'true' || $parameters[2] === 'false') {
+                    $parameters[2] = $parameters[2] === 'true';
+                }
+
                 if (isset($data[$parameters[0]]) === false || isset($data[$parameters[1]]) === false) {
                     // Required fields does not exists in the provided input
                     return false;
@@ -113,7 +121,7 @@ class VatValidatorServiceProvider extends ServiceProvider
                     return true;
                 }
 
-                if ($data[$parameters[1]] != $parameters[2]) {
+                if ($data[$parameters[1]] !== $parameters[2]) {
                     return true;
                 }
 

@@ -209,4 +209,44 @@ class VatValidatorTest extends TestCase
         // Test
         $this->assertFalse($validator->fails());
     }
+
+    public function testIfValidationExtentinsVatEuIfThrowsExeception():void
+    {
+
+        // Prepare
+        $data = [
+            'vatid' => 'XXX',
+            'company' => true,
+        ];
+
+        $rules = [
+            'vatid' => 'vat_eu_if:company,true',
+        ];
+
+        // Execute
+        $validator = Validator::make($data, $rules);
+
+        // Test
+        $this->assertTrue($validator->fails());
+    }
+
+    public function testIfValidationExtentinsVatEuIfWorksIfCompanyIsFalse():void
+    {
+
+        // Prepare
+        $data = [
+            'vatid' => 'XXX',
+            'company' => false,
+        ];
+
+        $rules = [
+            'vatid' => 'vat_eu_if:company,true',
+        ];
+
+        // Execute
+        $validator = Validator::make($data, $rules);
+
+        // Test
+        $this->assertFalse($validator->fails());
+    }
 }
