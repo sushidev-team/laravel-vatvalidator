@@ -22,7 +22,7 @@ class VatValidatorTest extends TestCase
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat'.md5(time().rand())
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'
         );
 
         $client
@@ -32,13 +32,19 @@ class VatValidatorTest extends TestCase
         $this->validator = new VatValidator($client);
     }
 
+    public function tearDown(): void
+    {
+        parent::tearDown();
+    }
+
     /**
      * Test if the the method will throw an exeception cause the id complete wrong.
      */
     public function testIfVatValidatorThrowsExceptionIfInvalidVatId():void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
         $result = $this->validator->check('TEST');
+        $this->assertNotNull($result);
+        $this->assertEquals(false, $result->isValid());
     }
 
     /**
@@ -46,7 +52,7 @@ class VatValidatorTest extends TestCase
      */
     public function testIfVatValidatorWillNotThrowExeceptionIfTheVatIdIsWrong():void
     {
-        $result = $this->validator->check('ATU69434328');
+        $result = $this->validator->check('ATU6943432');
         $this->assertNotNull($result);
         $this->assertEquals(false, $result->isValid());
     }
@@ -60,12 +66,12 @@ class VatValidatorTest extends TestCase
             'countryCode' => 'AT',
             'vatNumber'   => 'U69434329',
             'valid'   => true,
-            'name'    => 'PICAPIPE GmbH',
+            'name'    => 'Test PICAPIPE GmbH',
             'address' =>  'Geylinggasse 15-17\\nAT-1130 Wien',
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat'.md5(time().rand())
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'
         );
 
         $client
@@ -75,10 +81,11 @@ class VatValidatorTest extends TestCase
         $validator = new VatValidator($client);
 
         $result = $validator->check('ATU69434329');
+
         $this->assertNotNull($result);
         $this->assertEquals('AT', $result->getCountry());
         $this->assertEquals(true, $result->isValid());
-        $this->assertEquals('PICAPIPE GmbH', $result->getName());
+        $this->assertEquals('Test PICAPIPE GmbH', $result->getName());
     }
 
     /**
@@ -86,10 +93,27 @@ class VatValidatorTest extends TestCase
      */
     public function testIfFacadeIsWorking():void
     {
-        $result = VV::check('ATU69434329');
+        $mockedResult = [
+            'countryCode' => 'AT',
+            'vatNumber'   => 'U69434329',
+            'valid'   => true,
+            'name'    => 'Test PICAPIPE GmbH',
+            'address' =>  'Geylinggasse 15-17\\nAT-1130 Wien',
+        ];
+
+        $client = $this->getMockFromWsdl(
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'
+        );
+
+        $client
+            ->method('checkVat')
+            ->willReturn((object) $mockedResult);
+
+        $result = VV::setClient($client)->check('ATU69434329');
+
         $this->assertEquals('AT', $result->getCountry());
         $this->assertEquals(true, $result->isValid());
-        $this->assertEquals('PICAPIPE GmbH', $result->getName());
+        $this->assertEquals('Test PICAPIPE GmbH', $result->getName());
     }
 
     public function testIfValidationExtentionsWorks():void
@@ -116,7 +140,7 @@ class VatValidatorTest extends TestCase
 
         // Prepare
         $data = [
-            'vatid' => 'ATU69434328',
+            'vatid' => 'ATU6943432',
         ];
 
         $rules = [

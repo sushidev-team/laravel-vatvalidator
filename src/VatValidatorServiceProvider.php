@@ -73,7 +73,8 @@ class VatValidatorServiceProvider extends ServiceProvider
         Validator::extend('vat_eu', function ($attribute, $value, $parameters, $validator) {
             try {
                 $instance = new \AMBERSIVE\VatValidator\Classes\VatValidator();
-                $result = $instance->check($value);
+
+                $result = $instance->check($value, App::environment() === 'testing');
 
                 return $result->isValid();
             } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
@@ -94,7 +95,8 @@ class VatValidatorServiceProvider extends ServiceProvider
                 }
 
                 $instance = new \AMBERSIVE\VatValidator\Classes\VatValidator();
-                $result = $instance->check($value);
+
+                $result = $instance->check($value, App::environment() === 'testing');
 
                 return $result->isValid();
             } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
@@ -126,7 +128,7 @@ class VatValidatorServiceProvider extends ServiceProvider
                 }
 
                 $instance = new \AMBERSIVE\VatValidator\Classes\VatValidator();
-                $result = $instance->check($value);
+                $result = $instance->check($value, App::environment() === 'testing');
 
                 return $result->isValid();
             } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
