@@ -102,7 +102,7 @@ class VatValidatorTest extends TestCase
         ];
 
         $client = $this->getMockFromWsdl(
-            __DIR__.'/../checkVatService.wsdl', 'checkVat'
+            __DIR__.'/../checkVatService.wsdl', 'checkVat'.time()
         );
 
         $client
