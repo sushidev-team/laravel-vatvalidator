@@ -5,7 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.4.9] - 2020-12-17
+### Fixed
+- Tax id validation for testing mode was fixed due to the fact that api sometimes failed
 
+### Added
+- Pre api validation mechanism / with regex expressions based on the information on https://ec.europa.eu/taxation_customs/vies/faq.html#item_15
 ## [0.3.1] - 2020-12-17
 ### Fixed
 - Validation checking mechanism adapted to handle the vat checking flow correctly
